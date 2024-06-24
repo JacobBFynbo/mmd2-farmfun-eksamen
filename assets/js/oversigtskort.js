@@ -1,16 +1,31 @@
 document.addEventListener("DOMContentLoaded", function () {
   const allePrikker = document.querySelectorAll(".prik");
   const popUpBoks = document.getElementById("popUpBoks");
+  const oversigtskortIMG = document.getElementById("oversigtskortIMG");
+
+  function updatePrikkerPositioner() {
+    const kortWidth = oversigtskortIMG.offsetWidth;
+    const kortHeight = oversigtskortIMG.offsetHeight;
+    allePrikker.forEach((prik) => {
+      const xPercent = prik.getAttribute("data-x");
+      const yPercent = prik.getAttribute("data-y");
+      prik.style.left = `${(kortWidth * xPercent) / 100}px`;
+      prik.style.top = `${(kortHeight * yPercent) / 100}px`;
+    });
+  }
+
+  window.addEventListener("resize", updatePrikkerPositioner);
+  updatePrikkerPositioner();
 
   function showPopup(prik) {
     const info = prik.getAttribute("dataInfo");
     const dyreNavn = prik.querySelector("span").innerText;
-    const imgUrl = prik.getAttribute("data-img-url");
-    const linkUrl = prik.getAttribute("data-link-url");
+    const imgUrl = prik.getAttribute("dataImgUrl");
+    const linkUrl = prik.getAttribute("dataLinkUrl");
     popUpBoks.innerHTML = createPopupContent(info, imgUrl, linkUrl, dyreNavn);
-    const rect = prik.getBoundingClientRect();
-    popUpBoks.style.left = `${rect.right + window.scrollX + 10}px`;
-    popUpBoks.style.top = `${rect.top + window.scrollY}px`;
+    const boks = prik.getBoundingClientRect();
+    popUpBoks.style.left = `${boks.right + window.scrollX - 245}px`;
+    popUpBoks.style.top = `${boks.top + window.scrollY -330 }px`;
     popUpBoks.style.display = "block";
   }
 
